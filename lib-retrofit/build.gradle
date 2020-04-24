@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+// 远程仓库
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.wenkency'
+
+android {
+    compileSdkVersion this.app.compileSdkVersion
+    buildToolsVersion this.app.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion this.app.minSdkVersion
+        targetSdkVersion this.app.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation this.dependLibs.appcompat
+    implementation this.dependLibs.retrofit
+    implementation this.dependLibs.adapterRxjava2
+    implementation this.dependLibs.okhttp
+    implementation this.dependLibs.oklog
+    implementation this.dependLibs.okio
+    implementation this.dependLibs.gson
+    implementation this.dependLibs.rxandroid
+    implementation this.dependLibs.rxjava
+}
