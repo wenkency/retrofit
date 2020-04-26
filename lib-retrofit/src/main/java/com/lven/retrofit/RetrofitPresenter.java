@@ -167,12 +167,14 @@ public class RetrofitPresenter {
     /**
      * 下载
      */
-    public static void download(Activity activity, String url, Map<String, Object> params, String dirName, String fileName, IOnCallback onCallback) {
+    public static void download(Activity activity, String url, Map<String, String> headers, Map<String, Object> params,
+                                String dirName, String fileName, IOnCallback onCallback) {
         RestClient.create()
                 .method(RestMethod.DOWNLOAD)
                 .url(url)
                 .tag(activity)
                 .params(params)
+                .headers(headers)
                 .fileName(fileName)
                 .dirName(dirName)
                 .build()
@@ -183,6 +185,6 @@ public class RetrofitPresenter {
      * 下载
      */
     public static void download(Activity activity, String url, String dirName, String fileName, IOnCallback onCallback) {
-        download(activity, url, null, dirName, fileName, onCallback);
+        download(activity, url, null, null, dirName, fileName, onCallback);
     }
 }

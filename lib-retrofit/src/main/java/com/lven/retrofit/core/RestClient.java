@@ -60,10 +60,10 @@ public class RestClient {
                 call = service.put(url, headers, RestParamsUtils.requestBody(params),tag);
                 break;
             case UPLOAD:
-                call = service.upload(url, headers, new RestMultipartBody(RestParamsUtils.multipartBody(params),onCallback),tag);
+                call = service.upload(url, headers,RestParamsUtils.multipartBody(params,onCallback),tag);
                 break;
             case DOWNLOAD:
-                new RestDownloadClient(url, headers, params, onCallback, dirName, fileName,tag).download();
+                new RestDownloadClient(tag,url, headers, params,  dirName, fileName,onCallback).download();
                 return;
         }
         if (call != null) {

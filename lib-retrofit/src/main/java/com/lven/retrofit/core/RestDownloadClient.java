@@ -32,7 +32,8 @@ public class RestDownloadClient {
     // 文件下载相关
     private final String dirName, fileName;
 
-    public RestDownloadClient(String url, Map<String, String> headers, Map<String, Object> params, IOnCallback onCallback, String dirName, String fileName, String tag) {
+    public RestDownloadClient(String tag,String url, Map<String, String> headers, Map<String, Object> params,
+                              String dirName, String fileName, IOnCallback onCallback) {
         this.url = url;
         this.headers = headers;
         this.params = params;
@@ -55,9 +56,9 @@ public class RestDownloadClient {
                             if (onCallback != null) {
                                 onCallback.onError(response.code(), response.message());
                             }
-                        }
-                        if (onCallback != null) {
-                            onCallback.onAfter();
+                            if (onCallback != null) {
+                                onCallback.onAfter();
+                            }
                         }
                     }
 

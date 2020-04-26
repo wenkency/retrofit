@@ -1,9 +1,10 @@
-package com.lven.retrofit.core;
+package com.lven.retrofit.core.rx;
 
 
 import com.lven.retrofit.api.RestMethod;
 import com.lven.retrofit.api.RxRestService;
 import com.lven.retrofit.callback.IOnProgress;
+import com.lven.retrofit.core.RestCreator;
 import com.lven.retrofit.utils.RestParamsUtils;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ public class RxRestClient {
     Map<String, String> headers;
     Map<String, Object> params;
     RestMethod method;
+    String dirName, fileName;
     String tag;
     IOnProgress onProgress;
 
@@ -30,6 +32,8 @@ public class RxRestClient {
         this.params = builder.params;
         this.method = builder.method;
         this.tag = builder.tag;
+        this.dirName = builder.dirName;
+        this.fileName = builder.fileName;
         this.onProgress = builder.onProgress;
     }
 
@@ -56,7 +60,7 @@ public class RxRestClient {
                 call = service.put(url, headers, RestParamsUtils.requestBody(params), tag);
                 break;
             case UPLOAD:
-                call = service.upload(url, headers, new RestMultipartBody(RestParamsUtils.multipartBody(params),onProgress), tag);
+                call = service.upload(url, headers, RestParamsUtils.multipartBody(params, onProgress), tag);
                 break;
             case DOWNLOAD:
                 call = service.download(url, headers, params, tag);

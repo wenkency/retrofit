@@ -29,7 +29,6 @@ dependencies {
     implementation this.dependLibs.retrofit
     implementation this.dependLibs.adapterRxjava2
     implementation this.dependLibs.okhttp
-    implementation this.dependLibs.oklog
     implementation this.dependLibs.okio
     implementation this.dependLibs.gson
     implementation this.dependLibs.rxandroid

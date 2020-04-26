@@ -23,12 +23,18 @@ public class FileSingleObserver implements SingleObserver<File> {
         if (onCallback != null) {
             onCallback.onSuccess(value.getAbsolutePath());
         }
+        if (onCallback != null) {
+            onCallback.onAfter();
+        }
     }
 
     @Override
     public void onError(Throwable e) {
         if (onCallback != null) {
             onCallback.onError(RestCode.DOWNLOAD_ERROR, e.getMessage());
+        }
+        if (onCallback != null) {
+            onCallback.onAfter();
         }
     }
 }

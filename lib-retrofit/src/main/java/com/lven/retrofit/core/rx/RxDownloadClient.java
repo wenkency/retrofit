@@ -1,9 +1,12 @@
-package com.lven.retrofit.core;
+package com.lven.retrofit.core.rx;
 
+
+import androidx.collection.ArrayMap;
 
 import com.lven.retrofit.callback.FileProgress;
 import com.lven.retrofit.callback.FileSingleObserver;
 import com.lven.retrofit.callback.IOnCallback;
+import com.lven.retrofit.core.RestCreator;
 import com.lven.retrofit.utils.RestFileUtils;
 
 import java.io.File;
@@ -26,11 +29,11 @@ public class RxDownloadClient {
     String dirName, fileName;
     String tag;
 
-    public RxDownloadClient(String url, Map<String, String> headers, Map<String, Object> params,
-                            String dirName, String fileName, IOnCallback onCallback, String tag) {
+    public RxDownloadClient(String tag, String url, Map<String, String> headers, Map<String, Object> params,
+                            String dirName, String fileName, IOnCallback onCallback) {
         this.url = url;
-        this.headers = headers;
-        this.params = params;
+        this.headers = headers == null ? new ArrayMap<String, String>() : headers;
+        this.params = headers == null ? new ArrayMap<String, Object>() : params;
         this.onCallback = onCallback;
         this.dirName = dirName;
         this.fileName = fileName;
@@ -38,6 +41,9 @@ public class RxDownloadClient {
     }
 
     public void download() {
+        if (onCallback != null) {
+            onCallback.onBefore(headers);
+        }
         RestCreator.getRxRestService()
                 .download(url, headers, params, tag)
                 .map(new Function<ResponseBody, File>() {

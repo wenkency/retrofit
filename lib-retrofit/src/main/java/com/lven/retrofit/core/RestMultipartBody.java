@@ -8,7 +8,6 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okio.Buffer;
 import okio.BufferedSink;
@@ -20,11 +19,11 @@ import okio.Okio;
  */
 
 public class RestMultipartBody extends RequestBody {
-    private MultipartBody mRequestBody;
+    private RequestBody mRequestBody;
     private IOnProgress mCallback;
     private int mCurrentLength;
 
-    public RestMultipartBody(MultipartBody requestBody, IOnProgress callback) {
+    public RestMultipartBody(RequestBody requestBody, IOnProgress callback) {
         mRequestBody = requestBody;
         mCallback = callback;
     }

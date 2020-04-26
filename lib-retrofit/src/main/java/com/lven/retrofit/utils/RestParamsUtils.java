@@ -1,8 +1,9 @@
 package com.lven.retrofit.utils;
 
 
-
+import com.lven.retrofit.callback.IOnProgress;
 import com.lven.retrofit.core.RestCreator;
+import com.lven.retrofit.core.RestMultipartBody;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -25,7 +26,7 @@ public class RestParamsUtils {
     /**
      * 文件上传请求体
      */
-    public static MultipartBody multipartBody(Map<String, Object> params) {
+    public static MultipartBody multipartBody(Map<String, Object> params, IOnProgress onCallback) {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         for (String key : params.keySet()) {
             Object value = params.get(key);
@@ -34,25 +35,26 @@ public class RestParamsUtils {
             }
             if (value instanceof File) {
                 File file = (File) value;
-                fileToBody(builder, key, file);
+                fileToBody(builder, key, file, onCallback);
             } else if (value instanceof List) {
                 List<File> files = (List<File>) value;
                 for (File file : files) {
-                    fileToBody(builder, key, file);
+                    fileToBody(builder, key, file, onCallback);
                 }
             } else {
                 builder.addFormDataPart(key, String.valueOf(value));
             }
         }
-        return builder.build();
+        MultipartBody multipartBody = builder.build();
+        return multipartBody;
     }
 
     /**
      * 创建文件体
      */
-    private static void fileToBody(MultipartBody.Builder builder, String key, File file) {
+    private static void fileToBody(MultipartBody.Builder builder, String key, File file, IOnProgress onCallback) {
         RequestBody fileBody = RequestBody.create(file, MediaType.parse(guessFileType(file.getAbsolutePath())));
-        builder.addFormDataPart(key, file.getName(), fileBody);
+        builder.addFormDataPart(key, file.getName(), new RestMultipartBody(fileBody, onCallback));
     }
 
     /**

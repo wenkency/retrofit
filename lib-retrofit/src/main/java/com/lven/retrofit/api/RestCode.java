@@ -6,11 +6,15 @@ public interface RestCode {
      */
     int DOWNLOAD_ERROR = -1000;
     /**
+     * 上传错误
+     */
+    int UPLOAD_ERROR = -1001;
+    /**
      * 请求失败
      */
-    int REST_ERROR = -1001;
+    int REST_ERROR = -1002;
     /**
      * 解析失败
      */
-    int PARSE_ERROR = -1002;
+    int PARSE_ERROR = -1003;
 }

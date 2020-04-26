@@ -6,12 +6,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.ArrayMap;
 
 import com.lven.retrofit.RetrofitPresenter;
+import com.lven.retrofit.RxRetrofitPresenter;
 import com.lven.retrofit.callback.IObjectCallback;
 import com.lven.retrofit.callback.ObjectCallback;
 import com.lven.retrofit.callback.OnCallback;
+import com.lven.retrofit.utils.RestFileUtils;
 import com.lven.retrofitdemo.callback.PostBean;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * Retrofit网络请求测试
@@ -28,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     }
 
     public void request(View view) {
-        postObject();
+        upload();
     }
 
     /**
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     public void download() {
         String url = "https://img.car-house.cn/Upload/activity/20200424/J3GEiBhpAMfkesHCm7EWaQGwxDDwNbMc.png";
         // 下载后文件：/storage/emulated/0/Download/image/image.jpg
-        RetrofitPresenter.download(this, url, "image", "image.jpg", new OnCallback() {
+        RxRetrofitPresenter.download(this, url, "image", "image.jpg", new OnCallback() {
             @Override
             public void onProgress(float progress, float current, float total) {
                 Log.e(TAG, progress + ":" + current + ":" + total);
@@ -72,9 +78,31 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
 
             @Override
             public void onSuccess(String path) {
-                Log.e(TAG, path);
+                tv.setText(path);
             }
         });
+    }
+
+    public void upload() {
+        File avatarFile = new File(RestFileUtils.createDir("image"), "image.jpg");
+        Map<String, Object> params = new ArrayMap<>(1);
+        params.put("goodsImg", avatarFile);
+        RetrofitPresenter.upload(this,
+                "mapi/businessgoods/uploadGoodsImg/businessId_147102.json",
+                params,
+                new OnCallback() {
+                    @Override
+                    public void onProgress(float progress, float current, float total) {
+                       super.onProgress(progress,current,total);
+                       tv.setText(progress + ":" + current + ":" + total);
+                    }
+
+                    @Override
+                    public void onSuccess(String response) {
+                        tv.setText(response);
+                    }
+
+                });
     }
 
     /**

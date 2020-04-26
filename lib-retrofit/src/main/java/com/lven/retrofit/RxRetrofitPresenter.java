@@ -6,8 +6,9 @@ import com.lven.retrofit.api.RestCode;
 import com.lven.retrofit.api.RestMethod;
 import com.lven.retrofit.callback.IOnCallback;
 import com.lven.retrofit.callback.IOnProgress;
-import com.lven.retrofit.core.RestClient;
-import com.lven.retrofit.core.RxRestClient;
+import com.lven.retrofit.core.rx.RxDownloadClient;
+import com.lven.retrofit.core.rx.RxRestClient;
+import com.lven.retrofit.utils.RestTagUtils;
 import com.lven.retrofit.utils.RestUtils;
 
 import java.io.IOException;
@@ -211,28 +212,65 @@ public class RxRetrofitPresenter {
     /**
      * 上传
      */
-    public static void upload(Activity activity, String url, Map<String, Object> params, IOnCallback onCallback) {
-        RestClient.create()
+    public static void upload(Activity activity, String url, final Map<String, String> headers, Map<String, Object> params, final IOnCallback onCallback) {
+        if (onCallback == null) {
+            return;
+        }
+        RxRestClient.create()
                 .method(RestMethod.UPLOAD)
                 .url(url)
+                .onProgress(onCallback)
                 .tag(activity)
+                .headers(headers)
                 .params(params)
                 .build()
-                .request(onCallback);
+                .request()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        onCallback.onBefore(headers);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            onCallback.onSuccess(value.string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            onCallback.onError(RestCode.PARSE_ERROR, e.getMessage());
+                        }
+                        onCallback.onAfter();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onCallback.onError(RestCode.UPLOAD_ERROR, e.getMessage());
+                        onCallback.onAfter();
+                    }
+                });
+    }
+
+    /**
+     * 上传
+     */
+    public static void upload(Activity activity, String url, Map<String, Object> params, IOnCallback callback) {
+        upload(activity, url, null, params, callback);
     }
 
     /**
      * 下载
      */
-    public void download(Activity activity, String url, Map<String, Object> params, String dirName, String fileName, IOnCallback onCallback) {
-        RestClient.create()
-                .method(RestMethod.DOWNLOAD)
-                .url(url)
-                .tag(activity)
-                .params(params)
-                .fileName(fileName)
-                .dirName(dirName)
-                .build()
-                .request(onCallback);
+    public static void download(Activity activity, String url, Map<String, String> headers, Map<String, Object> params,
+                                String dirName, String fileName, IOnCallback onCallback) {
+        new RxDownloadClient(RestTagUtils.getTag(activity), url, headers, params, dirName, fileName, onCallback).download();
+    }
+
+    /**
+     * 下载
+     */
+    public static void download(Activity activity, String url, String dirName, String fileName, IOnCallback onCallback) {
+        download(activity, url, null, null, dirName, fileName, onCallback);
     }
 }

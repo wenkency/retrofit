@@ -17,6 +17,7 @@ public class BaseApplication extends Application {
         RestConfig.getInstance()
                 .setBaseUrl("http://httpbin.org/")
                 .setDebugUrl("http://httpbin.org/")
+                .setDebugUrl("https://api.car-house.cn/")
                 .setDebug(true)
                 .addInterceptor(interceptor)
                 // 可设置10内再次请求，走缓存

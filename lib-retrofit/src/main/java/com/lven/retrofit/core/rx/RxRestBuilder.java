@@ -1,4 +1,4 @@
-package com.lven.retrofit.core;
+package com.lven.retrofit.core.rx;
 
 import android.app.Activity;
 
@@ -18,7 +18,7 @@ public class RxRestBuilder {
     RestMethod method;
     String tag;
     IOnProgress onProgress;
-
+    String dirName, fileName;
     public RxRestBuilder() {
         headers = new ArrayMap<>();
         params = new ArrayMap<>();
@@ -43,7 +43,15 @@ public class RxRestBuilder {
         tag = RestTagUtils.getTag(activity);
         return this;
     }
+    public RxRestBuilder dirName(String dirName) {
+        this.dirName = dirName;
+        return this;
+    }
 
+    public RxRestBuilder fileName(String fileName) {
+        this.fileName = fileName;
+        return this;
+    }
     public RxRestBuilder headers(Map<String, String> headers) {
         if (headers != null) {
             this.headers.putAll(headers);
