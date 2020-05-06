@@ -29,6 +29,7 @@ public class RestConfig {
      * 请求成功后的拦截器
      */
     private List<Interceptor> netInterceptors;
+    private ActivityCallbacks callback;
 
     private RestConfig() {
         interceptors = new ArrayList<>();
@@ -105,7 +106,22 @@ public class RestConfig {
      */
     public final RestConfig register(Application application) {
         this.context = application.getApplicationContext();
-        application.registerActivityLifecycleCallbacks(new ActivityCallbacks());
+        // 判断一下，用户可能多次调用
+        if (callback == null) {
+            callback = new ActivityCallbacks();
+            application.registerActivityLifecycleCallbacks(callback);
+        }
+        return this;
+    }
+
+    /**
+     * 这里不注册Activity回调监听，一般不用管
+     */
+    public final RestConfig unregister(Application application) {
+        if (callback != null) {
+            application.unregisterActivityLifecycleCallbacks(callback);
+            callback = null;
+        }
         return this;
     }
 }
