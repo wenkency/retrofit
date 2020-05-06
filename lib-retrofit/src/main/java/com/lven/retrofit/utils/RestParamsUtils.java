@@ -1,6 +1,8 @@
 package com.lven.retrofit.utils;
 
 
+import android.text.TextUtils;
+
 import com.lven.retrofit.callback.IOnProgress;
 import com.lven.retrofit.core.RestCreator;
 import com.lven.retrofit.core.RestMultipartBody;
@@ -29,6 +31,9 @@ public class RestParamsUtils {
     public static MultipartBody multipartBody(Map<String, Object> params, IOnProgress onCallback) {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         for (String key : params.keySet()) {
+            if (TextUtils.isEmpty(key)) {
+                continue;
+            }
             Object value = params.get(key);
             if (value == null) {
                 continue;

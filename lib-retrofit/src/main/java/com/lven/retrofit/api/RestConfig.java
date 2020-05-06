@@ -32,8 +32,6 @@ public class RestConfig {
     private ActivityCallbacks callback;
 
     private RestConfig() {
-        interceptors = new ArrayList<>();
-        netInterceptors = new ArrayList<>();
     }
 
     private static class Holder {
@@ -74,21 +72,38 @@ public class RestConfig {
     }
 
     public final RestConfig addInterceptor(Interceptor interceptor) {
+        initInterceptor();
         this.interceptors.add(interceptor);
         return this;
     }
 
+    private void initInterceptor() {
+        if (this.interceptors == null) {
+            interceptors = new ArrayList<>();
+        }
+    }
+
     public final List<Interceptor> getInterceptors() {
+        initInterceptor();
         return interceptors;
     }
 
     public final RestConfig addNetInterceptor(Interceptor interceptor) {
+        initNetInterceptor();
         this.netInterceptors.add(interceptor);
         return this;
     }
 
+
     public List<Interceptor> getNetInterceptors() {
+        initNetInterceptor();
         return netInterceptors;
+    }
+
+    private void initNetInterceptor() {
+        if (this.netInterceptors == null) {
+            netInterceptors = new ArrayList<>();
+        }
     }
 
     public final RestConfig setDebugUrl(String debugUrl) {
@@ -104,24 +119,22 @@ public class RestConfig {
     /**
      * 这里注册Activity回调监听，用于Activity销毁自动取消网络
      */
-    public final RestConfig register(Application application) {
+    public final void register(Application application) {
         this.context = application.getApplicationContext();
         // 判断一下，用户可能多次调用
         if (callback == null) {
             callback = new ActivityCallbacks();
             application.registerActivityLifecycleCallbacks(callback);
         }
-        return this;
     }
 
     /**
      * 这里不注册Activity回调监听，一般不用管
      */
-    public final RestConfig unregister(Application application) {
+    public final void unregister(Application application) {
         if (callback != null) {
             application.unregisterActivityLifecycleCallbacks(callback);
             callback = null;
         }
-        return this;
     }
 }

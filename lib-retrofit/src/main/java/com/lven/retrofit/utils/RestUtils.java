@@ -1,5 +1,7 @@
 package com.lven.retrofit.utils;
 
+import android.text.TextUtils;
+
 import androidx.collection.ArrayMap;
 
 import com.lven.retrofit.api.FieldToJson;
@@ -37,7 +39,7 @@ public class RestUtils {
                     if (toJson != null) {
                         map.put(name, RestCreator.getGson().toJson(value));
                     } else {
-                        map.put(name, value.toString());
+                        map.put(name, String.valueOf(value));
                     }
                 }
             } catch (Throwable e) {
@@ -58,16 +60,21 @@ public class RestUtils {
         }
         Map<String, Object> map = new HashMap<>();
         // 业务的参数
-        String key = "";
-        String value = "";
+        String key = null;
+        String value = null;
         for (int i = 0; i < params.length; i++) {
             if (i % 2 == 0) {
                 key = params[i];// 取得Key
             } else {
                 value = params[i];// 取得值
+                if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
+                    continue;
+                }
                 map.put(key, value);//添加到集合
             }
         }
+        key = null;
+        value = null;
         return map;
     }
 }
