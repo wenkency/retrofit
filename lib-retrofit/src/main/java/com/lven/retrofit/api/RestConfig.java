@@ -3,7 +3,7 @@ package com.lven.retrofit.api;
 import android.app.Application;
 import android.content.Context;
 
-import com.lven.retrofit.interceptor.ActivityCallbacks;
+import com.lven.retrofit.adapter.ActivityCallbacks;
 
 import java.util.ArrayList;
 import java.util.List;
