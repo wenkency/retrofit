@@ -34,7 +34,17 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     }
 
     public void request(View view) {
-        upload();
+        RetrofitPresenter.get(this,"https://www.baidu.com",new OnCallback(){
+            @Override
+            public void onSuccess(String response) {
+                Log.e("TAG",response);
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                Log.e("TAG",code +":"+message);
+            }
+        });
     }
 
     /**
