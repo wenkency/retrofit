@@ -1,8 +1,5 @@
-package com.lven.retrofitdemo.callback;
+package com.lven.retrofit.callback;
 
-import android.util.Log;
-
-import com.lven.retrofit.callback.OnCallback;
 import com.lven.retrofit.core.RestCreator;
 import com.lven.retrofit.parse.ParameterTypeUtils;
 
@@ -15,7 +12,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 这里要自己解析，根据不用的项目，不同解析方案
+ * 这里是通用解析
+ * 其实最好自己解析，根据不用的项目，不同解析方案
  */
 public abstract class BeanCallback<T> extends OnCallback {
     @Override
@@ -48,6 +46,6 @@ public abstract class BeanCallback<T> extends OnCallback {
 
     @Override
     public void onError(int code, String message) {
-        Log.e("onError",code+":"+message);
+
     }
 }
