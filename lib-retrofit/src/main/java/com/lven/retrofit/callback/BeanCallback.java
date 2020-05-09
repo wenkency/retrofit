@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 这里是通用解析
+ *
  * 其实最好自己解析，根据不用的项目，不同解析方案
  */
 public abstract class BeanCallback<T> extends OnCallback {
