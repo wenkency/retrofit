@@ -33,7 +33,7 @@ public class ObjectCallback extends OnCallback {
                 if (clazz == String.class) {
                     data = response;
                 } else {
-                    data = RestCreator.getGson().fromJson(response, clazz);
+                    data = RestCreator.getGSon().fromJson(response, clazz);
                 }
             }
             callback.onSuccess(response, data, clazz);

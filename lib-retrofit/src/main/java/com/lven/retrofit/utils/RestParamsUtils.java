@@ -21,7 +21,7 @@ public class RestParamsUtils {
      * Json请求体
      */
     public static RequestBody requestBody(Map<String, Object> params) {
-        return RequestBody.create(RestCreator.getGson().toJson(params),
+        return RequestBody.create(RestCreator.getGSon().toJson(params),
                 MediaType.parse("application/json;charset=UTF-8"));
     }
 

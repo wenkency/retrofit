@@ -37,7 +37,7 @@ public class RestUtils {
                     // 根据标识转成Json
                     FieldToJson toJson = field.getAnnotation(FieldToJson.class);
                     if (toJson != null) {
-                        map.put(name, RestCreator.getGson().toJson(value));
+                        map.put(name, RestCreator.getGSon().toJson(value));
                     } else {
                         map.put(name, String.valueOf(value));
                     }

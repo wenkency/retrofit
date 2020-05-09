@@ -31,7 +31,7 @@ public abstract class BeanCallback<T> extends OnCallback {
                 .map(new Function<Type, T>() {
                     @Override
                     public T apply(Type type) throws Exception {
-                        return RestCreator.getGson().fromJson(response, type);
+                        return RestCreator.getGSon().fromJson(response, type);
                     }
                 })
                 .subscribeOn(Schedulers.io())

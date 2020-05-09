@@ -118,12 +118,12 @@ public class RestCreator {
         return RxRestServiceHolder.REST_SERVICE;
     }
 
-    private static class GosonHolder {
+    private static class GSonHolder {
         private static Gson GSON = new Gson();
     }
 
-    public static Gson getGson() {
-        return GosonHolder.GSON;
+    public static Gson getGSon() {
+        return GSonHolder.GSON;
     }
 
     public static OkHttpClient getOkHttpClient() {
