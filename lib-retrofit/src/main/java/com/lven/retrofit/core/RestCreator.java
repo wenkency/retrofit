@@ -58,8 +58,12 @@ public class RestCreator {
                         public boolean verify(String hostname, SSLSession session) {
                             return true;
                         }
-                    })
-                    .sslSocketFactory(RestSSLUtils.initSSLSocketFactory(), RestSSLUtils.initTrustManager());
+                    });
+            try {
+                builder.sslSocketFactory(RestSSLUtils.initSSLSocketFactory(), RestSSLUtils.initTrustManager());
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
 
             // 添加请求前的拦截器：如取消网络的TAG
             List<Interceptor> interceptors = RestConfig.getInstance().getInterceptors();
