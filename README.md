@@ -13,7 +13,7 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:1.1.0'
+implementation 'com.github.wenkency:retrofit:1.2.0'
 
 
 ```
@@ -42,6 +42,47 @@ public class BaseApplication extends Application {
     }
 }
 ```
+### 通用解析，不同项目自己解析一次
+```
+/**
+ * 参考解析（适合后台返回数据，直接生成的Bean），实际根据不用的项目，不同解析方案
+ */
+public abstract class BeanCallback<T> extends OnCallback {
+    @Override
+    public final void onSuccess(final String response) {
+        // 1. 获取泛型
+        Type actualType = ParameterTypeUtils.parameterType(this);
+        // 如果是要字符串，直接返回
+        if (ParameterTypeUtils.isString(actualType)) {
+            onSucceed((T) response);
+            return;
+        }
+        Single.just(actualType)
+                .map(new Function<Type, T>() {
+                    @Override
+                    public T apply(Type type) throws Exception {
+                        return RestCreator.getGSon().fromJson(response, type);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<T>() {
+                    @Override
+                    public void accept(T data) throws Exception {
+                        onSucceed(data);
+                    }
+                });
+    }
+
+    public abstract void onSucceed(T data);
+
+    @Override
+    public void onError(int code, String message) {
+        Log.e("onError",code+":"+message);
+    }
+}
+```
+
 
 ### 使用方式
 ```
