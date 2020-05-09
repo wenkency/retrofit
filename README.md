@@ -1,6 +1,9 @@
 # retrofit
-retrofit网络请求封装库，支持get post put delete download upload 表单(postForm、putForm)请求.
+retrofit网络请求封装库，
+支持get post put delete download upload 。
+支持表单(postForm、putForm)请求。
 支持文件上传、下载支持进度回调。
+支持在Activity销毁时，自动取消网络。
 
 ### 引入
 
@@ -13,7 +16,7 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:1.2.0'
+implementation 'com.github.wenkency:retrofit:1.3.0'
 
 
 ```
