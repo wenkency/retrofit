@@ -1,6 +1,7 @@
 package com.lven.retrofit.core.rx;
 
 
+import com.lven.retrofit.api.RestConfig;
 import com.lven.retrofit.api.RestMethod;
 import com.lven.retrofit.api.RxRestService;
 import com.lven.retrofit.callback.IOnProgress;
@@ -35,6 +36,15 @@ public class RxRestClient {
         this.dirName = builder.dirName;
         this.fileName = builder.fileName;
         this.onProgress = builder.onProgress;
+        // 在这里添加公共请求头和请求参数
+        Map<String, String> commHeaders = RestConfig.getInstance().getCommHeaders();
+        if (this.headers != null && commHeaders != null) {
+            this.headers.putAll(commHeaders);
+        }
+        Map<String, Object> commParams = RestConfig.getInstance().getCommParams();
+        if (this.params != null && commParams != null) {
+            this.params.putAll(commParams);
+        }
     }
 
     public Single<ResponseBody> request() {

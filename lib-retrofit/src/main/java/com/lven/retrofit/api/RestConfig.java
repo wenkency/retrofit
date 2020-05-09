@@ -7,6 +7,7 @@ import com.lven.retrofit.adapter.ActivityCallbacks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 
@@ -30,6 +31,14 @@ public class RestConfig {
      */
     private List<Interceptor> netInterceptors;
     private ActivityCallbacks callback;
+    /**
+     * 公共请求头
+     */
+    private Map<String, String> commHeaders;
+    /**
+     * 公共请求参数
+     */
+    private Map<String, Object> commParams;
 
     private RestConfig() {
     }
@@ -136,5 +145,23 @@ public class RestConfig {
             application.unregisterActivityLifecycleCallbacks(callback);
             callback = null;
         }
+    }
+
+    public final Map<String, String> getCommHeaders() {
+        return commHeaders;
+    }
+
+    public final RestConfig setCommHeaders(Map<String, String> commHeaders) {
+        this.commHeaders = commHeaders;
+        return this;
+    }
+
+    public final Map<String, Object> getCommParams() {
+        return commParams;
+    }
+
+    public final RestConfig setCommParams(Map<String, Object> commParams) {
+        this.commParams = commParams;
+        return this;
     }
 }

@@ -18,6 +18,8 @@ public class BaseApplication extends Application {
                 .setBaseUrl("http://httpbin.org/")
                 .setDebugUrl("http://httpbin.org/")
                 .setDebugUrl("https://api.car-house.cn/")
+                .setCommHeaders(null) // 添加公共请求头
+                .setCommParams(null)// 添加公共请求参数
                 .setDebug(true)
                 .addInterceptor(interceptor)
                 // 可设置10内再次请求，走缓存
