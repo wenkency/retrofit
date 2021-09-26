@@ -34,16 +34,20 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     }
 
     public void request(View view) {
-        RetrofitPresenter.get(this,"https://www.baidu.com",new OnCallback(){
+        post();
+    }
+
+    public void multiGet() {
+        RetrofitPresenter.get(this, "https://www.baidu.com", new OnCallback() {
             @Override
             public void onSuccess(String response) {
-                Log.e("TAG",response);
+                Log.e("TAG", response);
                 tv.setText(response);
             }
 
             @Override
             public void onError(int code, String message) {
-                Log.e("TAG",code +":"+message);
+                Log.e("TAG", code + ":" + message);
             }
         });
     }
@@ -104,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
                 new OnCallback() {
                     @Override
                     public void onProgress(float progress, float current, float total) {
-                       super.onProgress(progress,current,total);
-                       tv.setText(progress + ":" + current + ":" + total);
+                        super.onProgress(progress, current, total);
+                        tv.setText(progress + ":" + current + ":" + total);
                     }
 
                     @Override

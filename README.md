@@ -14,15 +14,19 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:1.4.0'
+implementation 'com.github.wenkency:retrofit:1.5.0'
 // 网络请求相关
-implementation this.dependLibs.retrofit
-implementation this.dependLibs.adapterRxjava2
-implementation this.dependLibs.okhttp
-implementation this.dependLibs.okio
-implementation this.dependLibs.gson
-implementation this.dependLibs.rxandroid
-implementation this.dependLibs.rxjava
+// retrofit + okhttp + rxjava2
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+implementation "com.squareup.okhttp3:okhttp:4.9.1"
+implementation "com.squareup.okio:okio:2.8.0"
+implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+// gson
+implementation 'com.google.code.gson:gson:2.8.8'
+// 请求打印日志可选
+// implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
 
 ```
@@ -36,7 +40,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         // 1. 初始化
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        // 日志拦截器，自己依赖，参考Demo
+        // 日志拦截器(可选)，自己依赖，参考Demo
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
         RestConfig.getInstance()

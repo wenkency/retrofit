@@ -16,9 +16,8 @@ public class BaseApplication extends Application {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         RestConfig.getInstance()
-                .setBaseUrl("http://httpbin.org/")
-                .setDebugUrl("http://httpbin.org/")
-                .setDebugUrl("https://api.car-house.cn/")
+                .setBaseUrl("http://httpbin.org")
+                .setDebugUrl("http://httpbin.org")
                 .setCommHeaders(null) // 添加公共请求头
                 .setCommParams(null)// 添加公共请求参数
                 .setDebug(true)
