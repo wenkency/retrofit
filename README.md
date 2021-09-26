@@ -1,8 +1,6 @@
 # retrofit
-retrofit网络请求封装库，
-支持get post put delete download upload 。
-支持表单(postForm、putForm)请求。
-支持文件上传、下载支持进度回调。
+
+retrofit网络请求封装库， 支持get post put delete download upload 。 支持表单(postForm、putForm)请求。 支持文件上传、下载支持进度回调。
 支持在Activity销毁时，自动取消网络。
 
 ### 引入
@@ -17,10 +15,20 @@ allprojects {
 
 
 implementation 'com.github.wenkency:retrofit:1.4.0'
+// 网络请求相关
+implementation this.dependLibs.retrofit
+implementation this.dependLibs.adapterRxjava2
+implementation this.dependLibs.okhttp
+implementation this.dependLibs.okio
+implementation this.dependLibs.gson
+implementation this.dependLibs.rxandroid
+implementation this.dependLibs.rxjava
 
 
 ```
+
 ### Application初始化
+
 ```
 public class BaseApplication extends Application {
     @Override
@@ -45,7 +53,9 @@ public class BaseApplication extends Application {
     }
 }
 ```
+
 ### 通用解析，不同项目自己解析一次
+
 ```
 /**
  * 参考解析（适合后台返回数据，直接生成的Bean），实际根据不用的项目，不同解析方案
@@ -86,8 +96,8 @@ public abstract class BeanCallback<T> extends OnCallback {
 }
 ```
 
-
 ### 使用方式
+
 ```
 /**
  * Retrofit网络请求测试
