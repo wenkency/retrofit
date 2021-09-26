@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -46,27 +48,46 @@ public class RestCreator {
         private static OkHttpClient OK_HTTP_CLIENT;
 
         private static final OkHttpClient getOkHttpClient() {
+            RestConfig config = RestConfig.getInstance();
+            OkHttpClient client = config.getOkHttpClient();
+            if (client != null) {
+                return client;
+            }
             if (OK_HTTP_CLIENT != null) {
                 return OK_HTTP_CLIENT;
+            }
+            // 主机过滤
+            HostnameVerifier hostnameVerifier = config.getHostnameVerifier();
+            if (hostnameVerifier == null) {
+                hostnameVerifier = new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                };
             }
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                     .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                     .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
-                    .hostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String hostname, SSLSession session) {
-                            return true;
-                        }
-                    });
+                    .hostnameVerifier(hostnameVerifier);
+            // SSL配置
             try {
-                builder.sslSocketFactory(RestSSLUtils.initSSLSocketFactory(), RestSSLUtils.initTrustManager());
+                SSLSocketFactory factory = config.getSslSocketFactory();
+                X509TrustManager trustManager = config.getTrustManager();
+                if (factory == null) {
+                    factory = RestSSLUtils.initSSLSocketFactory();
+                }
+                if (trustManager == null) {
+                    trustManager = RestSSLUtils.initTrustManager();
+                }
+                builder.sslSocketFactory(factory, trustManager);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
 
             // 添加请求前的拦截器：如取消网络的TAG
-            List<Interceptor> interceptors = RestConfig.getInstance().getInterceptors();
+            List<Interceptor> interceptors = config.getInterceptors();
             if (interceptors != null) {
                 for (Interceptor interceptor : interceptors) {
                     builder.addInterceptor(interceptor);
@@ -74,8 +95,8 @@ public class RestCreator {
             }
 
             // 添加请求成功后的拦截器：如缓存
-            List<Interceptor> netInterceptors = RestConfig.getInstance().getNetInterceptors();
-            Context context = RestConfig.getInstance().getContext();
+            List<Interceptor> netInterceptors = config.getNetInterceptors();
+            Context context = config.getContext();
             if (netInterceptors != null && netInterceptors.size() > 0) {
                 File file = context.getCacheDir();
                 if (!file.exists()) {

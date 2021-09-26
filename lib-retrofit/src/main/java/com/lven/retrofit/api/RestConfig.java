@@ -9,7 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+
 import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 /**
  * 网络请求统一配置
@@ -40,7 +45,37 @@ public class RestConfig {
      */
     private Map<String, Object> commParams;
 
+    private SSLSocketFactory sslSocketFactory;
+    private X509TrustManager trustManager;
+    private HostnameVerifier hostnameVerifier;
+    // 这个最优先
+    private OkHttpClient okHttpClient;
+
     private RestConfig() {
+    }
+
+    public RestConfig setSslSocketFactory(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager) {
+        this.sslSocketFactory = sslSocketFactory;
+        this.trustManager = trustManager;
+        return this;
+    }
+
+    public RestConfig setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+        this.hostnameVerifier = hostnameVerifier;
+        return this;
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    public RestConfig setOkHttpClient(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+        return this;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 
     private static class Holder {
@@ -163,5 +198,13 @@ public class RestConfig {
     public final RestConfig setCommParams(Map<String, Object> commParams) {
         this.commParams = commParams;
         return this;
+    }
+
+    public SSLSocketFactory getSslSocketFactory() {
+        return sslSocketFactory;
+    }
+
+    public X509TrustManager getTrustManager() {
+        return trustManager;
     }
 }

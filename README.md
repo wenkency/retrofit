@@ -16,7 +16,7 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:1.3.0'
+implementation 'com.github.wenkency:retrofit:1.4.0'
 
 
 ```
