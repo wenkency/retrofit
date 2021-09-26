@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
             @Override
             public void onSuccess(String response) {
                 Log.e("TAG",response);
+                tv.setText(response);
             }
 
             @Override

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 // 远程仓库
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.wenkency'
+group = 'com.github.wenkency'
 
 android {
     compileSdkVersion this.app.compileSdkVersion
@@ -25,12 +25,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation this.dependLibs.appcompat
-    implementation this.dependLibs.retrofit
-    implementation this.dependLibs.adapterRxjava2
-    implementation this.dependLibs.okhttp
-    implementation this.dependLibs.okio
-    implementation this.dependLibs.gson
-    implementation this.dependLibs.rxandroid
-    implementation this.dependLibs.rxjava
+    compileOnly this.dependLibs.appcompat
+    compileOnly this.dependLibs.retrofit
+    compileOnly this.dependLibs.adapterRxjava2
+    compileOnly this.dependLibs.okhttp
+    compileOnly this.dependLibs.okio
+    compileOnly this.dependLibs.gson
+    compileOnly this.dependLibs.rxandroid
+    compileOnly this.dependLibs.rxjava
 }
