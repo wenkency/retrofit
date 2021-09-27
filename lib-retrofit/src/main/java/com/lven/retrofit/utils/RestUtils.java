@@ -8,7 +8,6 @@ import com.lven.retrofit.api.FieldToJson;
 import com.lven.retrofit.core.RestCreator;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,7 +54,7 @@ public class RestUtils {
      * @param params String[] 数组参数. 格式: {"key", value, "key", value...}
      */
     public static Map<String, Object> getParams(String... params) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new ArrayMap<>();
         if (params == null) {
             return map;
         }
