@@ -14,7 +14,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         // 1. 初始化
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         RestConfig.getInstance()
                 .setBaseUrl("http://httpbin.org")
                 .setDebugUrl("http://httpbin.org")

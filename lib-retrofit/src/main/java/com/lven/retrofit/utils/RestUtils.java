@@ -55,10 +55,10 @@ public class RestUtils {
      * @param params String[] 数组参数. 格式: {"key", value, "key", value...}
      */
     public static Map<String, Object> getParams(String... params) {
-        if (params == null) {
-            return null;
-        }
         Map<String, Object> map = new HashMap<>();
+        if (params == null) {
+            return map;
+        }
         // 业务的参数
         String key = null;
         String value = null;

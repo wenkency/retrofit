@@ -14,6 +14,7 @@ import com.lven.retrofit.callback.IObjectCallback;
 import com.lven.retrofit.callback.ObjectCallback;
 import com.lven.retrofit.callback.OnCallback;
 import com.lven.retrofit.utils.RestFileUtils;
+import com.lven.retrofit.utils.RestUtils;
 import com.lven.retrofitdemo.callback.PostBean;
 
 import java.io.File;
@@ -70,8 +71,20 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
      */
     public void post() {
         // http://httpbin.org/post?id=1001
-        PostBean bean = new PostBean("1001");
+        // 请求写法一
+       /* PostBean bean = new PostBean("1001");
         RetrofitPresenter.post(this, "post", bean, new OnCallback() {
+            @Override
+            public void onSuccess(String response) {
+                tv.setText(response);
+            }
+        });*/
+        // 请求写法二
+        Map<String, Object> map = RestUtils.getParams();
+        map.put("id", "1001");
+        map.put("amount", 666);
+
+        RetrofitPresenter.post(this, "post", map, new OnCallback() {
             @Override
             public void onSuccess(String response) {
                 tv.setText(response);
