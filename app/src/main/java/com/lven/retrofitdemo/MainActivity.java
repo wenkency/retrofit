@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     }
 
     public void request(View view) {
-        post();
+       // post();
+        upload();
     }
 
     public void multiGet() {
