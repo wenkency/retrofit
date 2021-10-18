@@ -1,6 +1,8 @@
 package com.lven.retrofitdemo;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -8,6 +10,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.collection.ArrayMap;
 
+import com.boardour.permission.OnPermissionCallbackAdapter;
+import com.boardour.permission.Permission;
+import com.boardour.permission.XPermission;
 import com.lven.retrofit.RetrofitPresenter;
 import com.lven.retrofit.RxRetrofitPresenter;
 import com.lven.retrofit.callback.IObjectCallback;
@@ -32,11 +37,17 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.tv);
+
+        XPermission.with(this)
+                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                .request(new OnPermissionCallbackAdapter(){
+
+        });
     }
 
     public void request(View view) {
        // post();
-        upload();
+        upload1();
     }
 
     public void multiGet() {
@@ -106,18 +117,52 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
             }
 
             @Override
+            public void onError(int code, String message) {
+                Log.e("TAG", code + ":" + message);
+            }
+
+            @Override
             public void onSuccess(String path) {
                 tv.setText(path);
             }
         });
     }
+    public void upload1() {
+        File avatarFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                , "image.jpg");
+        Map<String, Object> params = new ArrayMap<>();
+        params.put("file", avatarFile);
+        params.put("type", "project");
+        RetrofitPresenter.upload(this,
+                "https://api.zuihaoxiangmu.com/upload/file",
+                params,
+                new OnCallback() {
+                    @Override
+                    public void onProgress(float progress, float current, float total) {
+                        super.onProgress(progress, current, total);
+                        tv.setText(progress + ":" + current + ":" + total);
+                    }
 
+                    @Override
+                    public void onError(int code, String message) {
+                        Log.e("TAG", code + ":" + message);
+                    }
+
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.e("TAG", response);
+                        tv.setText(response);
+                    }
+
+                });
+    }
     public void upload() {
-        File avatarFile = new File(RestFileUtils.createDir("image"), "image.jpg");
-        Map<String, Object> params = new ArrayMap<>(1);
+        File avatarFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                , "image.jpg");
+        Map<String, Object> params = new ArrayMap<>();
         params.put("goodsImg", avatarFile);
         RetrofitPresenter.upload(this,
-                "mapi/businessgoods/uploadGoodsImg/businessId_147102.json",
+                "https://api.car-house.cn/mapi/businessgoods/uploadGoodsImg/businessId_147102.json",
                 params,
                 new OnCallback() {
                     @Override
@@ -130,7 +175,10 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
                     public void onSuccess(String response) {
                         tv.setText(response);
                     }
-
+                    @Override
+                    public void onError(int code, String message) {
+                        Log.e("TAG", code + ":" + message);
+                    }
                 });
     }
 

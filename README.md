@@ -15,7 +15,7 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:1.5.0'
+implementation 'com.github.wenkency:retrofit:1.6.0'
 // 网络请求相关
 // retrofit + okhttp + rxjava2
 implementation 'com.squareup.retrofit2:retrofit:2.9.0'

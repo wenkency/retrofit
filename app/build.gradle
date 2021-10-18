@@ -36,9 +36,9 @@ dependencies {
     // retrofit + okhttp + rxjava2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation "com.squareup.okhttp3:okhttp:4.9.1"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
-    implementation "com.squareup.okio:okio:2.10.0"
+    implementation "com.squareup.okhttp3:okhttp:4.9.2"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
+    implementation "com.squareup.okio:okio:3.0.0-alpha.10"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     // gson
@@ -47,5 +47,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.github.wenkency:quickadapter:1.8.0'
     implementation project(path: ':lib-retrofit')
+    implementation  project(path: ':lib-aar-permission')
 
 }

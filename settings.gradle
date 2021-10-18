@@ -1,3 +1,4 @@
 rootProject.name='RetrofitDemo'
 include ':app'
+include ':lib-aar-permission'
 include ':lib-retrofit'

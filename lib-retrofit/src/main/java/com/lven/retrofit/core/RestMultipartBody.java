@@ -1,5 +1,7 @@
 package com.lven.retrofit.core;
 
+import android.util.Log;
+
 import com.lven.retrofit.callback.IOnProgress;
 
 import java.io.IOException;
@@ -21,11 +23,14 @@ import okio.Okio;
 public class RestMultipartBody extends RequestBody {
     private RequestBody mRequestBody;
     private IOnProgress mCallback;
-    private int mCurrentLength;
+    private boolean isWrite = false;
+
 
     public RestMultipartBody(RequestBody requestBody, IOnProgress callback) {
         mRequestBody = requestBody;
         mCallback = callback;
+
+
     }
 
     @Override
@@ -38,14 +43,25 @@ public class RestMultipartBody extends RequestBody {
         return mRequestBody.contentLength();
     }
 
+
     @Override
     public void writeTo(BufferedSink sink) throws IOException {
-        final long totalLength = contentLength();
+        Log.e("TAG", "writeTo");
+        if (!isWrite) {
+            isWrite = true;
+            return;
+        }
         // 用OKIO的代理类
-        ForwardingSink forwardingSink = new ForwardingSink(sink) {
+        ForwardingSink fs = new ForwardingSink(sink) {
+            long mCurrentLength = 0;
+            long totalLength = 0;
+
             @Override
             public void write(Buffer source, long byteCount) throws IOException {
                 super.write(source, byteCount);
+                if (totalLength == 0) {
+                    totalLength = contentLength();
+                }
                 mCurrentLength += byteCount;
                 // 上传进度回调
                 if (mCallback != null) {
@@ -61,7 +77,7 @@ public class RestMultipartBody extends RequestBody {
                 }
             }
         };
-        BufferedSink buffer = Okio.buffer(forwardingSink);
+        BufferedSink  buffer = Okio.buffer(fs);
         mRequestBody.writeTo(buffer);
         buffer.flush();
     }
