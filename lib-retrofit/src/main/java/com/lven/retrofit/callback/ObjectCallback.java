@@ -7,19 +7,32 @@ import com.lven.retrofit.core.RestCreator;
  * 如果clazz指定，就帮忙解析
  */
 public class ObjectCallback extends OnCallback {
+    /**
+     * 回调
+     */
     private IObjectCallback callback;
     /**
      * 如果clazz指定，就帮忙解析
      */
     private Class clazz;
-
-    public ObjectCallback(IObjectCallback callback, Class clazz) {
-        this.callback = callback;
-        this.clazz = clazz;
-    }
+    /**
+     * 请求码，用来区分不同的请求
+     */
+    private int requestCode;
 
     public ObjectCallback(IObjectCallback callback) {
+        this(callback, null);
+    }
+
+    public ObjectCallback(IObjectCallback callback, Class clazz) {
+        this(callback, clazz, -1);
+    }
+
+
+    public ObjectCallback(IObjectCallback callback, Class clazz, int requestCode) {
         this.callback = callback;
+        this.clazz = clazz;
+        this.requestCode = requestCode;
     }
 
     @Override
@@ -36,10 +49,10 @@ public class ObjectCallback extends OnCallback {
                     data = RestCreator.getGSon().fromJson(response, clazz);
                 }
             }
-            callback.onSuccess(response, data, clazz);
+            callback.onSuccess(response, data, clazz, requestCode);
         } catch (Throwable e) {
             // 解析失败，原封不动返回
-            callback.onSuccess(response, null, clazz);
+            callback.onSuccess(response, null, clazz, requestCode);
         }
 
     }
@@ -49,6 +62,6 @@ public class ObjectCallback extends OnCallback {
         if (callback == null) {
             return;
         }
-        callback.onError(code, message);
+        callback.onError(code, message, requestCode);
     }
 }

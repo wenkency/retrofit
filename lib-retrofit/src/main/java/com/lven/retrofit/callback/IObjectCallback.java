@@ -13,15 +13,15 @@ package com.lven.retrofit.callback;
 public interface IObjectCallback {
     /**
      * 请求成功回调事件处理
+     *
      * @param json 返回的Json
      * @param data 默认返回空，要自己解析
-     *
      */
-    void onSuccess(String json, Object data, Class clazz);
+    void onSuccess(String json, Object data, Class clazz, int requestCode);
 
     /**
      * 请求失败回调事件处理
      */
-    void onError(int code, String message);
+    void onError(int code, String message, int requestCode);
 
 }  

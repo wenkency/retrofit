@@ -3,6 +3,7 @@
 1. retrofit网络请求封装库， 支持get post put delete download upload 。
 2. 支持表单(postForm、putForm)请求。 文件上传、下载,支持进度回调。
 3. 支持在Activity销毁时，自动取消网络。
+4. 支持一个页面，处理多个接口。
 
 ### 引入
 
@@ -15,7 +16,7 @@ allprojects {
 	}
 
 
-implementation 'com.github.wenkency:retrofit:2.1.0'
+implementation 'com.github.wenkency:retrofit:2.2.0'
 // 网络请求相关
 // retrofit + okhttp + rxjava2
 implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -171,21 +172,32 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     /**
      * post请求测试
      * 回调在当前页面
-     * 其它也一样
+     * 调用顺序：A->B->C
      */
     public void postObject() {
-        // http://httpbin.org/post?id=1001
-        PostBean bean = new PostBean("1001");
-        RetrofitPresenter.post(this, "post", bean, new ObjectCallback(this, String.class));
+        // A ->B ->C
+        // 调A接口
+        MainPresenter.postA(this, this);
     }
 
     @Override
-    public void onSuccess(String json, Object data, Class clazz) {
-        tv.setText(data.toString());
+    public void onSuccess(String json, Object data, Class clazz, int requestCode) {
+        if (requestCode == 0) {// A 接口回调
+            tv.setText(data.toString());
+            // A回调后，调B接口
+            MainPresenter.postB(this,this);
+        } else if (requestCode == 1) { // B 接口回调
+            tv.setText(data.toString());
+            // B回调后，调C接口
+            MainPresenter.postC(this,
+                    new ObjectCallback(this,String.class,2));
+        }else if (requestCode == 2){// C 接口回调
+            tv.setText(data.toString());
+        }
     }
 
     @Override
-    public void onError(int code, String message) {
+    public void onError(int code, String message, int requestCode) {
         Log.e("TAG", code + ":" + message);
     }
 

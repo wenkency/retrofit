@@ -1,6 +1,5 @@
 package com.lven.retrofitdemo;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -15,15 +14,18 @@ import com.boardour.permission.Permission;
 import com.boardour.permission.XPermission;
 import com.lven.retrofit.RetrofitPresenter;
 import com.lven.retrofit.RxRetrofitPresenter;
+import com.lven.retrofit.api.RxRestService;
 import com.lven.retrofit.callback.IObjectCallback;
 import com.lven.retrofit.callback.ObjectCallback;
 import com.lven.retrofit.callback.OnCallback;
-import com.lven.retrofit.utils.RestFileUtils;
+import com.lven.retrofit.core.RestCreator;
 import com.lven.retrofit.utils.RestUtils;
-import com.lven.retrofitdemo.callback.PostBean;
 
 import java.io.File;
 import java.util.Map;
+
+import io.reactivex.Single;
+import okhttp3.ResponseBody;
 
 /**
  * Retrofit网络请求测试
@@ -40,14 +42,21 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
 
         XPermission.with(this)
                 .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-                .request(new OnPermissionCallbackAdapter(){
+                .request(new OnPermissionCallbackAdapter() {
 
-        });
+                });
+    }
+
+    public synchronized void test() {
+        RxRestService service = RestCreator.getRxRestService();
+        Single<ResponseBody> get = service.get("", null, null, null);
+
+
     }
 
     public void request(View view) {
-       // post();
-        upload1();
+        // post();
+        postObject();
     }
 
     public void multiGet() {
@@ -127,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
             }
         });
     }
+
     public void upload1() {
         File avatarFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 , "image.jpg");
@@ -156,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
 
                 });
     }
+
     public void upload() {
         File avatarFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 , "image.jpg");
@@ -175,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
                     public void onSuccess(String response) {
                         tv.setText(response);
                     }
+
                     @Override
                     public void onError(int code, String message) {
                         Log.e("TAG", code + ":" + message);
@@ -185,21 +197,32 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
     /**
      * post请求测试
      * 回调在当前页面
-     * 其它也一样
+     * 调用顺序：A->B->C
      */
     public void postObject() {
-        // http://httpbin.org/post?id=1001
-        PostBean bean = new PostBean("1001");
-        RetrofitPresenter.post(this, "post", bean, new ObjectCallback(this, String.class));
+        // A ->B ->C
+        // 调A接口
+        MainPresenter.postA(this, this);
     }
 
     @Override
-    public void onSuccess(String json, Object data, Class clazz) {
-        tv.setText(data.toString());
+    public void onSuccess(String json, Object data, Class clazz, int requestCode) {
+        if (requestCode == 0) {// A 接口回调
+            tv.setText(data.toString());
+            // A回调后，调B接口
+            MainPresenter.postB(this,this);
+        } else if (requestCode == 1) { // B 接口回调
+            tv.setText(data.toString());
+            // B回调后，调C接口
+            MainPresenter.postC(this,
+                    new ObjectCallback(this,String.class,2));
+        }else if (requestCode == 2){// C 接口回调
+            tv.setText(data.toString());
+        }
     }
 
     @Override
-    public void onError(int code, String message) {
+    public void onError(int code, String message, int requestCode) {
         Log.e("TAG", code + ":" + message);
     }
 

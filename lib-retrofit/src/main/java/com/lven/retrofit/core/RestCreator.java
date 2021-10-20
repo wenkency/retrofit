@@ -122,7 +122,7 @@ public class RestCreator {
     }
 
     /**
-     * 获取对象
+     * 获取网络请求接口
      */
     public static RestService getRestService() {
         return RestServiceHolder.REST_SERVICE;
@@ -137,7 +137,7 @@ public class RestCreator {
     }
 
     /**
-     * 获取对象
+     * 获取网络请求接口
      */
     public static RxRestService getRxRestService() {
         return RxRestServiceHolder.REST_SERVICE;
