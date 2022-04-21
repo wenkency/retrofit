@@ -210,13 +210,17 @@ public class MainActivity extends AppCompatActivity implements IObjectCallback {
         if (requestCode == 0) {// A 接口回调
             tv.setText(data.toString());
             // A回调后，调B接口
-            MainPresenter.postB(this,this);
+            MainPresenter.postB(this, this);
         } else if (requestCode == 1) { // B 接口回调
             tv.setText(data.toString());
             // B回调后，调C接口
-            MainPresenter.postC(this,
-                    new ObjectCallback(this,String.class,2));
-        }else if (requestCode == 2){// C 接口回调
+            MainPresenter.getC(this,
+                    new ObjectCallback(this, String.class, 2));
+        } else if (requestCode == 2) {// C 接口回调
+            tv.setText(data.toString());
+            MainPresenter.getD(this, new ObjectCallback(this,
+                    String.class, 3));
+        } else if (requestCode == 3) {// D 接口回调
             tv.setText(data.toString());
         }
     }

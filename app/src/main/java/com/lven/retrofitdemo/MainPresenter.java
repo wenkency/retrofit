@@ -27,13 +27,25 @@ public class MainPresenter {
                 "post", bean,
                 new ObjectCallback(callback, String.class, 1));
     }
+
     /**
      * 多个请求回调到一个方法
      */
-    public static void postC(Activity activity, ObjectCallback callback) {
+    public static void getC(Activity activity, ObjectCallback callback) {
         PostBean bean = new PostBean("1003");
-        RetrofitPresenter.post(activity,
-                "post", bean,
-               callback);
+        RetrofitPresenter.get(activity,
+                "get", bean,
+                callback);
+    }
+
+    /**
+     * 拼接Key相同的
+     *
+     * @param activity
+     * @param callback
+     */
+    public static void getD(Activity activity, ObjectCallback callback) {
+        String url = "http://httpbin.org/get?key=value1&key=value2";
+        RetrofitPresenter.get(activity, url, callback);
     }
 }
